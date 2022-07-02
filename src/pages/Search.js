@@ -12,6 +12,13 @@ class Search extends Component {
     };
   }
 
+  openView(data)
+  {
+    data.preventDefault();
+    console.log('The link was clicked.');
+    //alert(data.title);
+
+  }
   //convert seconds to minutes
   fmtMSS(s) {
     return (s - (s %= 60)) / 60 + (9 < s ? ":" : ":0") + s;
@@ -34,7 +41,10 @@ class Search extends Component {
       .then((response) => {
         console.log(response.data.data);
         this.setState({ songs: response.data.data });
-      });
+      }).catch(err=>{
+        console.log(err);
+        alert('Cant search at the moment!');
+      })
   };
   render() {
     return (
@@ -86,13 +96,16 @@ class Search extends Component {
           <div class="grid grid-cols-3 grid-rows-auto">
             {this.state.songs.map((data, id) => {
               return (
-                <Song
-                  time={this.fmtMSS(data.duration)}
-                  title={data.title}
-                  artist={data.artist.name}
-                  cover={data.album.cover}
-                  albumname={data.album.title}
-                />
+                <div >
+                    <Song
+                        time={this.fmtMSS(data.duration)}
+                        title={data.title}
+                        artist={data.artist.name}
+                        cover={data.album.cover}
+                        albumname={data.album.title}
+                    />
+                </div>
+              
               );
             })}
           </div>
