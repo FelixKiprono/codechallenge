@@ -8,7 +8,8 @@ class Search extends Component {
     this.state = {
       search: "",
       songs: [],
-      items: [{ name: "felix" }, { name: "john" }],
+      song: null,
+      tracks:[]
     };
   }
 
@@ -19,6 +20,26 @@ class Search extends Component {
     //alert(data.title);
 
   }
+   topTracks = (data)=>{
+
+this.setState({song:data});
+    let id = data.artist.id;
+    //console.log('https://api.deezer.com/artist/'+id+'/top?limit=5');
+    // console.log( this.state.song.artist.tracklist);
+
+    axios
+    .get(
+      'https://cors-anywhere.herokuapp.com/https://api.deezer.com/artist/'+id+'/top?limit=5')
+    .then((response) => {
+      console.log(response.data.data);
+      
+      // let tracks = response.data.data;
+      // let topfive = tracks.slice(0,6);
+      this.setState({ tracks: response.data.data });
+    }).catch(err=>{
+      console.log(err);
+    })
+}
   //convert seconds to minutes
   fmtMSS(s) {
     return (s - (s %= 60)) / 60 + (9 < s ? ":" : ":0") + s;
@@ -27,6 +48,7 @@ class Search extends Component {
   handleChange = (e) => {
     this.setState({ search: e.target.value });
   };
+
   //make a http request to fetch song based on artist name
   searchSong = (e) => {
    
@@ -47,10 +69,120 @@ class Search extends Component {
       })
   };
   render() {
+    const divStyle = {
+      width: '100%',
+      height:'400px',
+      backgroundImage: `url(${'https://images.unsplash.com/photo-1487180144351-b8472da7d491?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1172&q=80'})`,
+      backgroundSize: 'cover' 
+    }; 
+
+    if(this.state.song)
+    {
+     
+      return (
+      <div>
+         <div class="flex w-full">
+      <div class="w-full ">
+        <div class="p-4">
+        <h1></h1>       
+        
+         <div style={divStyle} class="flex flex-row">
+            <div class="w-2/3 h-full flex flex-col justify-center">
+                <div class="m-auto max-w-[80%] space-y-2">
+                    <h1 class="text-3xl font-bold text-gray-900/70">{this.state.song.artist.name}</h1>
+                    <h1 class="text-lg ">200k  Fans</h1>
+                    
+                    <div class="w-16 
+                    border border-gray-500/50 ..."></div>
+                   <p class="text-gray-700">
+                   Lorem ipsum dolor sit amet, consectetur adipiscing elit, 
+                   sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. 
+                   Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, 
+                   sunt in culpa qui officia deserunt mollit anim id est laborum.
+                   </p>
+                </div>
+
+            </div>
+            <div class="bg-white flex-1 h-full p-4 shadow-[rgba(0,_0,_0,_0.24)_0px_3px_8px]">
+            
+                <h1 class="font-bold my-4 text-gray-500">Top tracks</h1>
+
+                 <div class="space-y-2  divide-y">
+                    
+                    {
+                    this.state.tracks.map((data, id) => {
+                      
+                        return (
+                          <div class="flex flex-row justify-between pt-2">                
+                          <span  class="text-gray-600"><span class="font-bold mr-2">{id+1}</span> {data.title} </span>
+                          <span  class="text-gray-300"> {this.fmtMSS(data.duration)} </span>
+                          </div>
+                        
+                        );
+                      })}
+                   
+                    <div class="flex flex-row justify-between pt-2">                
+                    
+                    </div>
+                 </div>
+   
+             </div>
+          <div>
+
+        </div>
+        <div>
+
+        </div>
+        </div>
+
+        <div>
+        <h1 class="py-3 text-3xl font-bold text-gray-900/70">
+                     Albums
+                    </h1>
+                  <div class="flex justify-center">
+
+                 
+                 
+
+                    <div class="grid grid-cols-4 grid-rows-auto">
+
+                    <div class="" >
+                    <img class="w-full border" src='https://via.placeholder.com/140' alt=""   />
+                    <span class="text-sm text-gray-500">1:00</span>
+                    <h1 class="font-bold text-lg text-gray-600"></h1>Independent
+                    </div>
+                    <div class="" >
+                    <img class="w-full border" src='https://via.placeholder.com/140' alt=""   />
+                    <span class="text-sm text-gray-500">2:00</span>
+                    <h1 class="font-bold text-lg text-gray-600">So Lonely</h1>
+                    </div>
+                    <div class="" >
+                    <img class="w-full border" src='https://via.placeholder.com/140' alt=""   />
+                    <span class="text-sm text-gray-500">2:10</span>
+                    <h1 class="font-bold text-lg text-gray-600">Call me</h1>
+                    </div>
+                    <div class="" >
+                    <img class="w-full border" src='https://via.placeholder.com/140' alt=""   />
+                    <span class="text-sm text-gray-500">4:00</span>
+                    <h1 class="font-bold text-lg text-gray-600">Smack that</h1>
+                    </div>
+                    </div>
+                    </div>
+
+        </div>
+      </div>
+     </div>
+    </div>
+      </div>)
+    }
+    else
+    {
     return (
       <div class="flex justify-center">
+  
         <div class="max-w-[800px]">
           <div class="p-4">
+          
             <h1 class="p-2">Search Songs By Artist Name</h1>
 
             <label
@@ -97,13 +229,21 @@ class Search extends Component {
             {this.state.songs.map((data, id) => {
               return (
                 <div >
+                  <button 
+                      onClick={()=>this.topTracks(data)}
+                      primary={true}
+                      >
                     <Song
+                        data={data}
                         time={this.fmtMSS(data.duration)}
                         title={data.title}
                         artist={data.artist.name}
                         cover={data.album.cover}
                         albumname={data.album.title}
-                    />
+                    >
+                
+                      </Song>
+                      </button>
                 </div>
               
               );
@@ -112,6 +252,7 @@ class Search extends Component {
         </div>
       </div>
     );
+          }
   }
 }
 export default Search;

@@ -1,15 +1,29 @@
-function Song({time,title,artist,cover,albumname}) {
-    return (
-      <>
-      <div class="p-4">
-        <img class="" src={cover} alt=""  />
-            <span class="text-sm text-gray-500">{time}</span>
-            <h1 class="font-bold text-lg text-gray-600">{title}</h1>
-            <span class="text-sm text-gray-500">{artist}</span>
-            <span class="text-sm text-gray-500 hidden xl:block">{albumname}</span>
+import React, { Component } from "react";
 
-      </div>      
-       </>
-    );
+class Song extends Component {
+   
+  constructor() {
+    super();
   }
-  export default Song;
+
+  render() {
+    return (
+  <>
+
+  
+        <div class="p-4" >
+           
+            <img class="" src={this.props.cover} alt=""   />
+            <span class="text-sm text-gray-500">{this.props.time}</span>
+            <h1 class="font-bold text-lg text-gray-600">{this.props.title}</h1>
+            <span class="text-sm text-gray-500">{this.props.artist}</span>
+            <span class="text-sm text-gray-500 hidden xl:block">{this.props.albumname}</span>
+          
+      </div>
+  </>
+      
+        
+    )
+}
+}
+  export default  Song;
