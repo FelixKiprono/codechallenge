@@ -65,7 +65,8 @@ this.setState({song:data});
         this.setState({ songs: response.data.data });
       }).catch(err=>{
         console.log(err);
-        alert('Cant search at the moment!');
+        window.open('https://cors-anywhere.herokuapp.com', '_blank');
+
       })
   };
   render() {
@@ -141,8 +142,7 @@ this.setState({song:data});
                     </h1>
                   <div class="flex justify-center">
 
-                 
-                 
+                
 
                     <div class="grid grid-cols-4 grid-rows-auto">
 
